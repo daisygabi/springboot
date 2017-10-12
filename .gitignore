@@ -34,10 +34,12 @@ spring-*/src/main/java/META-INF/MANIFEST.MF
 *.ipr
 *.iws
 *.idea
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
 
-vcs.xml
-.idea
-out
+˚out
 test-output
 atlassian-ide-plugin.xml
 .gradletasknamecache
