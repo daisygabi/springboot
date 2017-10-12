@@ -14,4 +14,6 @@ public interface DeviceServiceDao {
     public void addDevice(Device device, long homeId);
     public void deleteDevice(long deviceId, long homeId);
     public void updateDevice(Device device, long homeId);
+
+    public Device findDeviceById(long deviceId);
 }

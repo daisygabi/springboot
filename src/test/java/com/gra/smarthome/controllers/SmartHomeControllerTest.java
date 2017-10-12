@@ -15,6 +15,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Arrays;
 
@@ -45,7 +49,6 @@ public class SmartHomeControllerTest {
     }
 
     /**
-     *
      * @throws Exception
      */
     @Test
@@ -81,6 +84,7 @@ public class SmartHomeControllerTest {
 
     /**
      * Test created device appears to be active when it's pinged
+     *
      * @throws Exception
      */
     @Test
@@ -98,6 +102,7 @@ public class SmartHomeControllerTest {
 
     /**
      * Test created device appears to be inactive when it's pinged
+     *
      * @throws Exception
      */
     @Test
@@ -112,6 +117,30 @@ public class SmartHomeControllerTest {
         verifyNoMoreInteractions(mockDeviceService);
     }
 
+    @Test
+    public void findDeviceById_ShouldReturnNullPointer() throws Exception {
+        when(mockDeviceService.findDeviceById(1L)).thenThrow(new NullPointerException(""));
 
+        mockMvc.perform(get("/{homeId}/{deviceId}", 1L))
+                .andExpect(status().isNotFound());
 
+        verify(mockDeviceService, times(1)).findDeviceById(1L);
+        verifyNoMoreInteractions(mockDeviceService);
+    }
+
+    @Test
+    public void findById() throws Exception {
+        Device device = new DeviceBuilder()
+                .getActiveDevice(false)
+                .getName("RandomDevice")
+                .build();
+
+        when(mockDeviceService.findDeviceById(1L)).thenReturn(device);
+
+        mockMvc.perform(get("/{homeId}/{deviceId}", 1L))
+                .andExpect(status().isFound());
+
+        verify(mockDeviceService, times(1)).findDeviceById(1L);
+        verifyNoMoreInteractions(mockDeviceService);
+    }
 }

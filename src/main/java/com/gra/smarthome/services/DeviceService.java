@@ -41,4 +41,9 @@ public class DeviceService implements DeviceServiceDao {
     public void updateDevice(Device device, long homeId) {
 
     }
+
+    @Override
+    public Device findDeviceById(long deviceId) {
+        return null;
+    }
 }
