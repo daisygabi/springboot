@@ -41,18 +41,8 @@ public class SmartHomeController {
         return deviceService.isDeviceActive(homeId, deviceId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/{homeId}/add/device", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public void addDeviceToHome(@PathVariable long homeId, @PathVariable long deviceId, @PathVariable String name, @PathVariable boolean active) {
-        Device device = new Device(deviceId, name, active);
-        device.setHomeId(homeId);
-
-        deviceService.create(device);
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value="/")
+    @PostMapping(value="/newDevice")
     public Device create(@RequestBody Device device) {
         deviceService.create(device);
         return device;
