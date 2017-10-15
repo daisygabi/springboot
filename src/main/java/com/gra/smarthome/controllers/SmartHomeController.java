@@ -1,14 +1,14 @@
 package com.gra.smarthome.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.gra.smarthome.model.Device;
 import com.gra.smarthome.services.DeviceService;
+import com.gra.smarthome.services.DeviceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,6 +23,7 @@ public class SmartHomeController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/hello")
+    @Transactional(readOnly = true)
     public String printWelcomeMessage() {
         return "How is your day? :)";
     }
@@ -38,25 +39,25 @@ public class SmartHomeController {
     @RequestMapping(value = "/{homeId}/{deviceId}")
     @ResponseBody
     public boolean isDeviceActive(@PathVariable long homeId, @PathVariable long deviceId) {
-        return deviceService.isDeviceActive(homeId, deviceId);
+        return false;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value="/newDevice")
+    @PostMapping(value = "/newDevice")
     public Device create(@RequestBody Device device) {
         deviceService.create(device);
         return device;
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping(value="/{deviceId}")
+    @PutMapping(value = "/{deviceId}")
     public void update(@RequestBody Device device,
                        @PathVariable Long id) {
         deviceService.update(device);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(value="/{deviceId}")
+    @DeleteMapping(value = "/{deviceId}")
     public void delete(@PathVariable long id) {
         deviceService.delete(id);
     }

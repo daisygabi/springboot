@@ -1,52 +1,24 @@
 package com.gra.smarthome.services;
 
 import com.gra.smarthome.model.Device;
-import com.gra.smarthome.persistence.DeviceDao;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Temporal;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
-@Transactional
-public class DeviceService implements DeviceServiceImpl {
+/**
+ * Acts like a contract between the Dao and the Controller
+ */
+@Repository
+public interface DeviceService {
 
-    @Autowired
-    private DeviceDao deviceDao;
+    List<Device> getDevices(Long homeId);
 
-    @Override
-    public void create(Device device) {
-        deviceDao.create(device);
-    }
+    void create(Device device);
 
-    @Override
-    public List<Device> getDevices(long homeId) {
-        return deviceDao.getDevices(homeId);
-    }
+    void delete(Long deviceId);
 
-    @Override
-    public boolean isDeviceActive(long homeId, long deviceId) {
-        return deviceDao.isDeviceActive(homeId, deviceId);
-    }
+    void update(Device device);
 
-
-    @Override
-    public void delete(long deviceId) {
-        deviceDao.delete(deviceId);
-    }
-
-    @Override
-    public void update(Device device) {
-        deviceDao.update(device);
-    }
-
-    @Override
-    public Device findDeviceById(long deviceId) {
-        return deviceDao.findDeviceById(deviceId);
-    }
+    Device findDeviceById(Long deviceId);
 }
