@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface DeviceServiceDao {
 
-    public List<Device> getHomeRegisteredDevices(long homeId);
+    public List<Device> getDevices(long homeId);
     public boolean isDeviceActive(long homeId, long deviceId);
     public void addDevice(Device device, long homeId);
     public void deleteDevice(long deviceId, long homeId);

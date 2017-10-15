@@ -1,25 +1,20 @@
 package com.gra.smarthome.services;
 
 import com.gra.smarthome.model.Device;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- *
- */
-@Component
+@Service
 public class DeviceService implements DeviceServiceDao {
+
+    public DeviceService(){}
 
     private List<Device> devices;
 
+    @Override
     public List<Device> getDevices(long homeId) {
         return devices;
-    }
-
-    @Override
-    public List<Device> getHomeRegisteredDevices(long homeId) {
-        return null;
     }
 
     @Override
@@ -44,6 +39,6 @@ public class DeviceService implements DeviceServiceDao {
 
     @Override
     public Device findDeviceById(long deviceId) {
-        return null;
+        return new Device(deviceId, "RandomDevice", false);
     }
 }
