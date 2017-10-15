@@ -8,7 +8,9 @@ import com.gra.smarthome.services.DeviceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -29,7 +31,7 @@ public class SmartHomeController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/{homeId}/devices", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/devices", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Device> getHomeRegisteredDevices(@PathVariable long homeId) {
         return deviceService.getDevices(homeId);
@@ -42,17 +44,17 @@ public class SmartHomeController {
         return false;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/newDevice")
-    public Device create(@RequestBody Device device) {
+    @RequestMapping(method = RequestMethod.POST, value = "/newDevice")
+    public ResponseEntity<Device> create(@RequestBody Device device) {
         deviceService.create(device);
-        return device;
+        return new ResponseEntity<Device>(device, HttpStatus.CREATED);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping(value = "/{deviceId}")
-    public void update(@RequestBody Device device,
-                       @PathVariable Long id) {
+    @GetMapping(value = "/edit/{deviceId}")
+    public void update(@RequestBody Long id,
+                       Model model) {
+        Device device = deviceService.findDeviceById(id);
+        model.addAttribute("singer", device);
         deviceService.update(device);
     }
 
@@ -62,9 +64,9 @@ public class SmartHomeController {
         deviceService.delete(id);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/{deviceId}")
-    public Device findDeviceById(@PathVariable long id) {
-        return deviceService.findDeviceById(id);
+    @RequestMapping(value = "/{deviceId}", method = RequestMethod.GET)
+    public ResponseEntity<Device> findDeviceById(@PathVariable long id) {
+        Device device = deviceService.findDeviceById(id);
+        return new ResponseEntity<Device>(device, HttpStatus.OK);
     }
 }

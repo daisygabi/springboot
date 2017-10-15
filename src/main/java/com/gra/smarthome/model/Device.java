@@ -21,6 +21,8 @@ public class Device implements Serializable {
     @Column(name="homeId")
     private long homeId;
 
+    public Device() {}
+
     public Device(long deviceId, String name, boolean active) {
         this.deviceId = deviceId;
         this.name = name;
@@ -62,5 +64,13 @@ public class Device implements Serializable {
 
     public void setHomeId(long homeId) {
         this.homeId = homeId;
+    }
+
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("DeviceId: " + deviceId);
+        buffer.append(", Name: " + name);
+        buffer.append(", Active: " + active);
+        return buffer.toString();
     }
 }

@@ -14,7 +14,7 @@ public interface DeviceService {
 
     List<Device> getDevices(Long homeId);
 
-    void create(Device device);
+    Device create(Device device);
 
     void delete(Long deviceId);
 
