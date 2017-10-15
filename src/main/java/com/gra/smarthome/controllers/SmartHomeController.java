@@ -1,11 +1,14 @@
 package com.gra.smarthome.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.gra.smarthome.model.Device;
 import com.gra.smarthome.services.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,14 +28,14 @@ public class SmartHomeController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{homeId}/devices")
+    @RequestMapping(value = "/{homeId}/devices", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Device> getHomeRegisteredDevices(@PathVariable long homeId) {
         return deviceService.getDevices(homeId);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/?{homeId}/{deviceId}")
+    @RequestMapping(value = "/{homeId}/{deviceId}")
     @ResponseBody
     public boolean isDeviceActive(@PathVariable long homeId, @PathVariable long deviceId) {
         return deviceService.isDeviceActive(homeId, deviceId);

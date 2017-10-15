@@ -1,8 +1,17 @@
 package com.gra.smarthome.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Device {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long deviceId;
+
+    @Column(name="name")
     private String name;
+
+    @Column(name="active")
     private boolean active;
 
     public Device(long deviceId, String name, boolean active) {

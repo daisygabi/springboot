@@ -1,12 +1,22 @@
 package com.gra.smarthome.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "smarthome")
 public class SmartHome {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Column(name="location")
     private String location;
+
+    @Column
+    @ElementCollection(targetClass=Device.class)
     private List<Device> devices;
-    private long adminGroupId;
 
     public long getId() {
         return id;
@@ -30,13 +40,5 @@ public class SmartHome {
 
     public void setDevices(List<Device> devices) {
         this.devices = devices;
-    }
-
-    public long getAdminGroupId() {
-        return adminGroupId;
-    }
-
-    public void setAdminGroupId(long adminGroupId) {
-        this.adminGroupId = adminGroupId;
     }
 }
