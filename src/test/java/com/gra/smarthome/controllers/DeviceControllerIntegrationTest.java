@@ -3,12 +3,15 @@ package com.gra.smarthome.controllers;
 import com.gra.smarthome.model.Device;
 import com.gra.smarthome.services.DeviceService;
 import com.gra.smarthome.utils.DeviceBuilder;
+import org.hibernate.service.spi.InjectService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,9 +35,6 @@ public class DeviceControllerIntegrationTest {
     private RestTemplate restTemplate = new RestTemplate();
 
     private MockMvc mockMvc;
-
-    @Mock
-    private DeviceService deviceService;
 
     @InjectMocks
     private DeviceController deviceController;
@@ -60,7 +60,7 @@ public class DeviceControllerIntegrationTest {
                 .withDeviceId(2L)
                 .build();
 
-        when(deviceService.getDevices()).thenReturn(Arrays.asList(activeDevice, inactiveDevice));
+//        when(deviceService.getDevices()).thenReturn(Arrays.asList(activeDevice, inactiveDevice));
 
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk());
@@ -68,23 +68,15 @@ public class DeviceControllerIntegrationTest {
 
     @Test
     public void createNewDevice() {
-        Device deviceBuilder = new DeviceBuilder()
-                .withActiveDevice(false)
-                .withDeviceId(1L)
-                .withName("RandomDevice")
-                .build();
-
-        ResponseEntity<Device> responseEntity =
-                restTemplate.postForEntity(BASE_URL, deviceBuilder, Device.class);
+        ResponseEntity<Device> responseEntity = createDevice(1L);
         Device client = responseEntity.getBody();
+
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals("RandomDevice", client.getName());
     }
 
     @Test
     public void findEmptyDeviceById_ShouldReturnHttpStatusCode404() throws Exception {
-        when(deviceService.findDeviceById(0L)).thenThrow(new NullPointerException(""));
-
         try {
             restTemplate.getForEntity(BASE_URL + "/0", Device.class);
         } catch (HttpClientErrorException ex) {
@@ -94,13 +86,23 @@ public class DeviceControllerIntegrationTest {
 
     @Test
     public void findDeviceById() throws Exception {
-        when(deviceService.findDeviceById(1L)).thenReturn(new Device(1L, "RandonDevice", true));
+        ResponseEntity<Device> entity = createDevice(2L);
 
         ResponseEntity<Device> responseEntity =
-                restTemplate.getForEntity(BASE_URL + "/1", Device.class);
+                restTemplate.getForEntity(BASE_URL + "/2", Device.class);
         Device client = responseEntity.getBody();
 
         assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
         assertEquals("RandomDevice", client.getName());
+    }
+
+    private ResponseEntity<Device> createDevice(Long id) {
+        Device deviceBuilder = new DeviceBuilder()
+                .withActiveDevice(false)
+                .withDeviceId(id)
+                .withName("RandomDevice")
+                .build();
+
+        return restTemplate.postForEntity(BASE_URL, deviceBuilder, Device.class);
     }
 }
