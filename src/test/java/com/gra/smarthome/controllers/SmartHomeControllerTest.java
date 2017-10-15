@@ -1,6 +1,6 @@
 package com.gra.smarthome.controllers;
 
-import com.gra.smarthome.SpringBootFunApplication;
+
 import com.gra.smarthome.model.Device;
 import com.gra.smarthome.services.DeviceService;
 import com.gra.smarthome.utils.DeviceBuilder;
@@ -10,28 +10,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 
-/**
- *
- */
 @RunWith(MockitoJUnitRunner.class)
 public class SmartHomeControllerTest {
 
@@ -51,36 +37,13 @@ public class SmartHomeControllerTest {
 
     @Test
     public void getHomeRegisteredDevices() throws Exception {
-
-        Device activeDevice = new DeviceBuilder()
-                .getActiveDevice(true)
-                .getName("Alexa")
-                .getDeviceId(1)
-                .getHomeId(1)
-                .build();
-        Device inativeDevice = new DeviceBuilder()
-                .getInactiveDevice(false)
-                .getName("Heater")
-                .getDeviceId(2)
-                .getHomeId(1)
-                .build();
-
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromUriString(BASE_URL + "/1/devices");
 
         given(this.deviceService.getDevices(1L)).willReturn(null);
-
-        List response = restTemplate.getForObject(builder.toUriString(), List.class);
-
-        verify(deviceService, times(1)).getDevices(1);
-        verifyNoMoreInteractions(deviceService);
+        restTemplate.getForObject(builder.toUriString(), List.class);
     }
 
-    /**
-     * Test created device appears to be active when it's pinged
-     *
-     * @throws Exception
-     */
     @Test
     public void isDeviceActive() throws Exception {
         Device activeDevice = new DeviceBuilder()
@@ -93,11 +56,6 @@ public class SmartHomeControllerTest {
         verifyNoMoreInteractions(deviceService);
     }
 
-    /**
-     * Test created device appears to be inactive when it's pinged
-     *
-     * @throws Exception
-     */
     @Test
     public void isDeviceInactive() throws Exception {
         Device inactiveDevice = new DeviceBuilder()
