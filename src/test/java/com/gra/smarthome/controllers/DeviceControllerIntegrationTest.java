@@ -75,20 +75,21 @@ public class DeviceControllerIntegrationTest {
                 .build();
 
         ResponseEntity<Device> responseEntity =
-                restTemplate.postForEntity(BASE_URL , deviceBuilder, Device.class);
+                restTemplate.postForEntity(BASE_URL, deviceBuilder, Device.class);
         Device client = responseEntity.getBody();
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals("RandomDevice", client.getName());
     }
 
-    @Test(expected = HttpClientErrorException.class)
+    @Test
     public void findEmptyDeviceById_ShouldReturnHttpStatusCode404() throws Exception {
         when(deviceService.findDeviceById(0L)).thenThrow(new NullPointerException(""));
 
-        ResponseEntity<Device> responseEntity =
-                restTemplate.getForEntity(BASE_URL + "/0", Device.class);
-
-//        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        try {
+            restTemplate.getForEntity(BASE_URL + "/0", Device.class);
+        } catch (HttpClientErrorException ex) {
+            assertEquals(ex.getStatusCode(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Test
