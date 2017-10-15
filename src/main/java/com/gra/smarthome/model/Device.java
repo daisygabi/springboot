@@ -1,12 +1,16 @@
 package com.gra.smarthome.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Device {
+@Table(name = "device")
+public class Device implements Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long deviceId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "deviceId")
+    private Long deviceId;
 
     @Column(name="name")
     private String name;
@@ -14,10 +18,18 @@ public class Device {
     @Column(name="active")
     private boolean active;
 
+    @Column(name="homeId")
+    private long homeId;
+
     public Device(long deviceId, String name, boolean active) {
         this.deviceId = deviceId;
         this.name = name;
         this.active = active;
+    }
+
+    public Device(long homeId) {
+        super();
+        this.homeId = homeId;
     }
 
     public long getDeviceId() {
@@ -42,5 +54,13 @@ public class Device {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public long getHomeId() {
+        return homeId;
+    }
+
+    public void setHomeId(long homeId) {
+        this.homeId = homeId;
     }
 }

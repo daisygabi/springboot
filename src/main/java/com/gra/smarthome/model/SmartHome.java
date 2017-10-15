@@ -8,14 +8,15 @@ import java.util.List;
 public class SmartHome {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "homeId")
     private long id;
 
     @Column(name="location")
     private String location;
 
     @Column
-    @ElementCollection(targetClass=Device.class)
+    @OneToMany
     private List<Device> devices;
 
     public long getId() {
