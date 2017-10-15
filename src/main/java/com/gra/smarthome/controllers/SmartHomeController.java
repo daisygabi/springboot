@@ -26,12 +26,14 @@ public class SmartHomeController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{homeId}/devices")
+    @ResponseBody
     public List<Device> getHomeRegisteredDevices(@PathVariable long homeId) {
         return deviceService.getDevices(homeId);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{homeId}/{deviceId}")
+    @GetMapping("/?{homeId}/{deviceId}")
+    @ResponseBody
     public boolean isDeviceActive(@PathVariable long homeId, @PathVariable long deviceId) {
         return deviceService.isDeviceActive(homeId, deviceId);
     }

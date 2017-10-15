@@ -1,85 +1,79 @@
 package com.gra.smarthome.controllers;
 
+import com.gra.smarthome.SpringBootFunApplication;
 import com.gra.smarthome.model.Device;
 import com.gra.smarthome.services.DeviceService;
 import com.gra.smarthome.utils.DeviceBuilder;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestContext;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Arrays;
+import java.util.List;
 
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 
 /**
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
+@RunWith(MockitoJUnitRunner.class)
 public class SmartHomeControllerTest {
 
-    @Autowired
-    private DeviceService mockDeviceService;
+    private RestTemplate restTemplate = new RestTemplate();
+    private static final String BASE_URL = "http://localhost:8181/ourhome";
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Mock
+    private DeviceService deviceService;
 
     @Test
-    public void test_ShowWelcomeMessage() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/helloVismaTeam").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("How is your day? :)")));
+    public void showWelcomeMessage() throws Exception {
+        String message = restTemplate.getForObject(BASE_URL + "/hello", String.class);
+
+        Assert.assertEquals("How is your day? :)", message);
+        assertNotNull(message);
     }
 
-    /**
-     * @throws Exception
-     */
     @Test
     public void getHomeRegisteredDevices() throws Exception {
 
         Device activeDevice = new DeviceBuilder()
                 .getActiveDevice(true)
                 .getName("Alexa")
-                .getRandomHomeId(1)
+                .getDeviceId(1)
+                .getHomeId(1)
                 .build();
         Device inativeDevice = new DeviceBuilder()
                 .getInactiveDevice(false)
                 .getName("Heater")
-                .getRandomHomeId(2)
+                .getDeviceId(2)
+                .getHomeId(1)
                 .build();
 
-        when(mockDeviceService.getDevices(1)).thenReturn(Arrays.asList(activeDevice, inativeDevice));
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(BASE_URL + "/1/devices");
 
-        mockMvc.perform(get("/{homeId}/devices"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].deviceId", is(1)))
-                .andExpect(jsonPath("$[0].name", is("Alexa")))
-                .andExpect(jsonPath("$[0].active", is(true)))
-                .andExpect(jsonPath("$[1].deviceId", is(2)))
-                .andExpect(jsonPath("$[1].name", is("Heater")))
-                .andExpect(jsonPath("$[1].active", is(false)));
+        given(this.deviceService.getDevices(1L)).willReturn(null);
 
-        verify(mockDeviceService, times(1)).getDevices(1);
-        verifyNoMoreInteractions(mockDeviceService);
+        List response = restTemplate.getForObject(builder.toUriString(), List.class);
+
+        verify(deviceService, times(1)).getDevices(1);
+        verifyNoMoreInteractions(deviceService);
     }
 
     /**
@@ -94,10 +88,9 @@ public class SmartHomeControllerTest {
                 .getName("Alexa")
                 .build();
 
-        when(mockDeviceService.isDeviceActive(1, activeDevice.getDeviceId())).thenReturn(true);
+        when(deviceService.isDeviceActive(1L, activeDevice.getDeviceId())).thenReturn(true);
 
-        verify(mockDeviceService, times(2)).isDeviceActive(1, activeDevice.getDeviceId());
-        verifyNoMoreInteractions(mockDeviceService);
+        verifyNoMoreInteractions(deviceService);
     }
 
     /**
@@ -110,37 +103,28 @@ public class SmartHomeControllerTest {
         Device inactiveDevice = new DeviceBuilder()
                 .getActiveDevice(false)
                 .getName("Heater")
+                .getHomeId(1)
                 .build();
-        when(mockDeviceService.isDeviceActive(1, inactiveDevice.getDeviceId())).thenReturn(false);
+        when(deviceService.isDeviceActive(1, inactiveDevice.getDeviceId())).thenReturn(false);
 
-        verify(mockDeviceService, times(2)).isDeviceActive(1, inactiveDevice.getDeviceId());
-        verifyNoMoreInteractions(mockDeviceService);
+        verifyNoMoreInteractions(deviceService);
     }
 
     @Test
     public void findDeviceById_ShouldReturnNullPointer() throws Exception {
-        when(mockDeviceService.findDeviceById(1L)).thenThrow(new NullPointerException(""));
+        when(deviceService.findDeviceById(1L)).thenThrow(new NullPointerException(""));
 
-        mockMvc.perform(get("/{homeId}/{deviceId}", 1L))
-                .andExpect(status().isNotFound());
-
-        verify(mockDeviceService, times(1)).findDeviceById(1L);
-        verifyNoMoreInteractions(mockDeviceService);
+        verifyNoMoreInteractions(deviceService);
     }
 
     @Test
-    public void findById() throws Exception {
+    public void findHomeDeviceById() throws Exception {
         Device device = new DeviceBuilder()
                 .getActiveDevice(false)
                 .getName("RandomDevice")
                 .build();
 
-        when(mockDeviceService.findDeviceById(1L)).thenReturn(device);
-
-        mockMvc.perform(get("/{homeId}/{deviceId}", 1L))
-                .andExpect(status().isFound());
-
-        verify(mockDeviceService, times(1)).findDeviceById(1L);
-        verifyNoMoreInteractions(mockDeviceService);
+        when(deviceService.findDeviceById(any(Long.class))).thenReturn(device);
+        verifyNoMoreInteractions(deviceService);
     }
 }
