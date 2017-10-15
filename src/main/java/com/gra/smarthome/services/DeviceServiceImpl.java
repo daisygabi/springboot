@@ -17,7 +17,7 @@ public class DeviceServiceImpl implements DeviceService {
     private DeviceRepository deviceRepository;
 
     @Override
-    public List<Device> getDevices(Long homeId) {
+    public List<Device> getDevices() {
         return Lists.newArrayList(deviceRepository.findAll());
     }
 

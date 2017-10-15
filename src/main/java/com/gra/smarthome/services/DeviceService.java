@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface DeviceService {
 
-    List<Device> getDevices(Long homeId);
+    List<Device> getDevices();
 
     Device create(Device device);
 

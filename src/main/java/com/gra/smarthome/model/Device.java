@@ -18,20 +18,12 @@ public class Device implements Serializable {
     @Column(name="active")
     private boolean active;
 
-    @Column(name="homeId")
-    private long homeId;
-
     public Device() {}
 
     public Device(long deviceId, String name, boolean active) {
         this.deviceId = deviceId;
         this.name = name;
         this.active = active;
-    }
-
-    public Device(long homeId) {
-        super();
-        this.homeId = homeId;
     }
 
     public long getDeviceId() {
@@ -56,14 +48,6 @@ public class Device implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public long getHomeId() {
-        return homeId;
-    }
-
-    public void setHomeId(long homeId) {
-        this.homeId = homeId;
     }
 
     public String toString() {

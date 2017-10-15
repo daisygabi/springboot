@@ -10,47 +10,41 @@ public class DeviceBuilder {
     private long deviceId = (long) Math.random();
     private String name = new String();
     private boolean active = false;
-    private long homeId;
-
-    public DeviceBuilder getHomeId(long homeId) {
-        this.homeId = homeId;
-        return this;
-    }
 
     public long getDeviceId() {
         return deviceId;
     }
 
-    public DeviceBuilder getDeviceId(long deviceId) {
+    public DeviceBuilder withDeviceId(long deviceId) {
         this.deviceId = deviceId;
         return this;
     }
 
-    public DeviceBuilder getActiveDevice(boolean active) {
+    public DeviceBuilder withActiveDevice(boolean active) {
         this.active = active;
 
         return this;
     }
 
-    public DeviceBuilder getInactiveDevice(boolean active) {
+    public DeviceBuilder withInactiveDevice(boolean active) {
         this.active = active;
 
         return this;
     }
 
-    public DeviceBuilder getName(String name) {
+    public DeviceBuilder withName(String name) {
         this.name = name;
 
         return this;
     }
 
-    public DeviceBuilder getNullName() {
+    public DeviceBuilder withNullName() {
         this.name = null;
 
         return this;
     }
 
-    public DeviceBuilder getNameTooLong(String name) {
+    public DeviceBuilder withNameTooLong(String name) {
         this.name = name;
 
         return this;
