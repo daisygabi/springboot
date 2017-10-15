@@ -10,13 +10,19 @@ public class DeviceBuilder {
     private long deviceId = (long) Math.random();
     private String name = new String();
     private boolean active = false;
+    private long homeId;
+
+    public DeviceBuilder getHomeId(long homeId) {
+        this.homeId = homeId;
+        return this;
+    }
 
     public long getDeviceId() {
         return deviceId;
     }
 
-    public DeviceBuilder getRandomHomeId(long homeId) {
-        this.deviceId = homeId;
+    public DeviceBuilder getDeviceId(long deviceId) {
+        this.deviceId = deviceId;
         return this;
     }
 
