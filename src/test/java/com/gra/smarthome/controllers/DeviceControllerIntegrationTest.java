@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,25 +46,15 @@ public class DeviceControllerIntegrationTest {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(deviceController)
                 .build();
+
+        // Create dummy Devices
+        createDevice(1L);
+        createDevice(2L);
     }
 
     @Test
     public void getAllDevices() throws Exception {
-        Device activeDevice = new DeviceBuilder()
-                .withActiveDevice(true)
-                .withName("Alexa")
-                .withDeviceId(1L)
-                .build();
-        Device inactiveDevice = new DeviceBuilder()
-                .withActiveDevice(false)
-                .withName("Heater")
-                .withDeviceId(2L)
-                .build();
-
-//        when(deviceService.getDevices()).thenReturn(Arrays.asList(activeDevice, inactiveDevice));
-
-        mockMvc.perform(get(BASE_URL))
-                .andExpect(status().isOk());
+        restTemplate.getForEntity(BASE_URL + "/devices", List.class);
     }
 
     @Test
@@ -86,8 +77,6 @@ public class DeviceControllerIntegrationTest {
 
     @Test
     public void findDeviceById() throws Exception {
-        ResponseEntity<Device> entity = createDevice(2L);
-
         ResponseEntity<Device> responseEntity =
                 restTemplate.getForEntity(BASE_URL + "/2", Device.class);
         Device client = responseEntity.getBody();

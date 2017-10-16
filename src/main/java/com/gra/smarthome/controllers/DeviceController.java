@@ -48,7 +48,7 @@ public class DeviceController {
         deviceService.delete(id);
     }
 
-    @RequestMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Device> findDeviceById(@PathVariable Long id) {
         Device device = deviceService.findDeviceById(id);
         if(device != null) {
