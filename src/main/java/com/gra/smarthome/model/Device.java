@@ -1,5 +1,7 @@
 package com.gra.smarthome.model;
 
+import org.springframework.beans.factory.annotation.Required;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -12,10 +14,10 @@ public class Device implements Serializable {
     @Column(name = "deviceId")
     private Long deviceId;
 
-    @Column(name="name")
+    @Column(name="name", nullable = false)
     private String name;
 
-    @Column(name="active")
+    @Column(name="active", nullable = false)
     private boolean active;
 
     public Device() {}

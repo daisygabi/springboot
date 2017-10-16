@@ -31,8 +31,11 @@ public class DeviceController {
     
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Device> create(@RequestBody Device device) {
-        deviceService.create(device);
-        return new ResponseEntity<Device>(device, HttpStatus.CREATED);
+        if(device != null) {
+            deviceService.create(device);
+            return new ResponseEntity<>(device, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id}")

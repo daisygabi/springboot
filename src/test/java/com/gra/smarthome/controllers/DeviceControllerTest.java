@@ -45,4 +45,14 @@ public class DeviceControllerTest {
 
         given(deviceService.create(device)).willReturn(new Device(1L, "New Alexa", true));
     }
+
+    @Test
+    public void createNewNullNameForDevice_ShouldFail() throws Exception {
+        Device device = new DeviceBuilder()
+                .withActiveDevice(true)
+                .withName(null)
+                .build();
+
+        given(deviceService.create(device)).willReturn(null);
+    }
 }
