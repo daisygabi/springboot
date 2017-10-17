@@ -45,7 +45,7 @@ public class DeviceControllerIntegrationTest {
     public void createNewDevice() {
         ResponseEntity<Device> responseEntity = createDevice("Random Device");
         Device client = responseEntity.getBody();
-//
+
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals("Random Device", client.getName());
     }
@@ -97,9 +97,5 @@ public class DeviceControllerIntegrationTest {
                 .build();
 
         return restTemplate.postForEntity(BASE_URL, deviceBuilder, Device.class);
-    }
-
-    private Device extractDevice(ResponseEntity<Device[]> responseEntity) {
-        return responseEntity.getBody()[0];
     }
 }
