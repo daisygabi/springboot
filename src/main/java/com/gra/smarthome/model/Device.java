@@ -12,7 +12,7 @@ public class Device implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deviceId")
-    private Long deviceId;
+    private long deviceId;
 
     @Column(name="name", nullable = false)
     private String name;

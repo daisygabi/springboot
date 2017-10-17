@@ -22,18 +22,17 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
 
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/devices", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Device> getHomeRegisteredDevices() {
-        return deviceService.getDevices();
+    public ResponseEntity<List<Device>> getHomeRegisteredDevices() {
+        return new ResponseEntity<>(deviceService.getDevices(), HttpStatus.OK);
     }
     
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Device> create(@RequestBody Device device) {
         if(device != null) {
-            deviceService.create(device);
-            return new ResponseEntity<>(device, HttpStatus.CREATED);
+            Device createdDevice = deviceService.create(device);
+            return new ResponseEntity<>(createdDevice, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -47,8 +46,10 @@ public class DeviceController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public void delete(@PathVariable long id) {
-        deviceService.delete(id);
+    public void delete(@PathVariable Long id) {
+        if(id != null) {
+            deviceService.delete(id);
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
