@@ -27,7 +27,7 @@ public class DeviceController {
     public ResponseEntity<List<Device>> getHomeRegisteredDevices() {
         return new ResponseEntity<>(deviceService.getDevices(), HttpStatus.OK);
     }
-    
+
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Device> create(@RequestBody Device device) {
         if(device != null) {
