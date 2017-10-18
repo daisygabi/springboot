@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import sun.invoke.empty.Empty;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,11 +28,6 @@ public class DeviceControllerIntegrationTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-
-        // Create dummy Devices
-        createDevice("Alexa");
-        createDevice("Heater");
-        createDevice("Google");
     }
 
     @Test
@@ -66,7 +60,7 @@ public class DeviceControllerIntegrationTest {
         Device client = responseEntity.getBody();
 
         assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
-        assertEquals("Heater", client.getName());
+        assertEquals("Device Bedroom 2", client.getName());
     }
 
     @Test
@@ -76,7 +70,7 @@ public class DeviceControllerIntegrationTest {
         Device client = responseEntity.getBody();
 
         assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
-        assertEquals("Heater", client.getName());
+        assertEquals("Device Bedroom 2", client.getName());
     }
 
     @Test

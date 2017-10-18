@@ -11,15 +11,6 @@ public class DeviceBuilder {
     private String name = new String();
     private boolean active = false;
 
-    public long getDeviceId() {
-        return deviceId;
-    }
-
-    public DeviceBuilder withDeviceId(long deviceId) {
-        this.deviceId = deviceId;
-        return this;
-    }
-
     public DeviceBuilder withActiveDevice(boolean active) {
         this.active = active;
 
@@ -57,6 +48,6 @@ public class DeviceBuilder {
      * @return
      */
     public Device build() {
-        return new Device(getDeviceId(), name, active);
+        return new Device(name, active);
     }
 }

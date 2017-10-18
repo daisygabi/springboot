@@ -20,12 +20,23 @@ public class Device implements Serializable {
     @Column(name="active", nullable = false)
     private boolean active;
 
+    private Room room;
+
     public Device() {}
 
-    public Device(long deviceId, String name, boolean active) {
-        this.deviceId = deviceId;
+    public Device(String name, boolean active) {
         this.name = name;
         this.active = active;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public long getDeviceId() {

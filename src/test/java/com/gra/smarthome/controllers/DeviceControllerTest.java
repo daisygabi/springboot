@@ -43,7 +43,7 @@ public class DeviceControllerTest {
                 .withName("New Alexa")
                 .build();
 
-        given(deviceService.create(device)).willReturn(new Device(1L, "New Alexa", true));
+        given(deviceService.create(device)).willReturn(new Device("New Alexa", true));
     }
 
     @Test
