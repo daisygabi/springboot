@@ -43,4 +43,3 @@ spring-*/src/main/java/META-INF/MANIFEST.MF
 test-output
 atlassian-ide-plugin.xml
 .gradletasknamecache
-src/main/java/com/gra/smarthome/persistence/
