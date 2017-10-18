@@ -7,7 +7,6 @@ import com.gra.smarthome.model.Device;
  */
 public class DeviceBuilder {
 
-    private long deviceId = (long) Math.random();
     private String name = new String();
     private boolean active = false;
 

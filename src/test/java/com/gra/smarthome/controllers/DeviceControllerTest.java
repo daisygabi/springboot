@@ -26,7 +26,7 @@ public class DeviceControllerTest {
     }
 
     @Test
-    public void findHomeDeviceById() throws Exception {
+    public void findDeviceById() throws Exception {
         Device device = new DeviceBuilder()
                 .withActiveDevice(false)
                 .withName("RandomDevice")
@@ -37,7 +37,7 @@ public class DeviceControllerTest {
     }
 
     @Test
-    public void createNewDevice() throws Exception {
+    public void create() throws Exception {
         Device device = new DeviceBuilder()
                 .withActiveDevice(true)
                 .withName("New Alexa")

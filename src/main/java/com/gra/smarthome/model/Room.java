@@ -1,6 +1,9 @@
 package com.gra.smarthome.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -13,6 +16,8 @@ public class Room implements Serializable {
     private long id;
 
     @Column(name = "name", nullable = false)
+    @Size(max = 50, message = "Maximum size for a room's name is 50")
+    @NotEmpty(message = "You have to give the Room a name")
     private String name;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
@@ -23,6 +28,11 @@ public class Room implements Serializable {
 
     public Room(String name) {
         this.name = name;
+    }
+
+    public Room(String name, Set<Device> devices) {
+        this.name = name;
+        this.devices = devices;
     }
 
     public long getId() {
