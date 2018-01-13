@@ -22,7 +22,7 @@ public class MessageControllerTest {
     private static final String BASE_URL = "http://localhost:8181/ourhome";
 
     @Test
-    public void showWelcomeMessage() throws Exception {
+    public void showWelcomeMessage() {
         String message = restTemplate.getForObject(BASE_URL + "/hello", String.class);
 
         Assert.assertEquals("How is your day? :)", message);

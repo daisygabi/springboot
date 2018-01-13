@@ -31,7 +31,7 @@ public class DeviceControllerIntegrationTest {
     }
 
     @Test
-    public void getAllDevices() throws Exception {
+    public void getAllDevices() {
         restTemplate.getForEntity(BASE_URL, List.class);
     }
 
@@ -45,7 +45,7 @@ public class DeviceControllerIntegrationTest {
     }
 
     @Test
-    public void findEmptyDeviceById_ShouldReturnHttpStatusCode404() throws Exception {
+    public void findEmptyDeviceById_ShouldReturnHttpStatusCode404() {
         try {
             restTemplate.getForEntity(BASE_URL + "/0", Device.class);
         } catch (HttpClientErrorException ex) {
@@ -54,7 +54,7 @@ public class DeviceControllerIntegrationTest {
     }
 
     @Test
-    public void findDeviceById() throws Exception {
+    public void findDeviceById() {
         ResponseEntity<Device> responseEntity =
                 restTemplate.getForEntity(BASE_URL + "/2", Device.class);
         Device client = responseEntity.getBody();
@@ -64,7 +64,7 @@ public class DeviceControllerIntegrationTest {
     }
 
     @Test
-    public void findDeviceByName() throws Exception {
+    public void findDeviceByName() {
         ResponseEntity<Device> responseEntity =
                 restTemplate.getForEntity(BASE_URL + "/2", Device.class);
         Device client = responseEntity.getBody();

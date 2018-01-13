@@ -20,13 +20,13 @@ public class DeviceControllerTest {
     private DeviceService deviceService;
 
     @Test
-    public void findDeviceById_ShouldReturnNullPointer() throws Exception {
+    public void findDeviceById_ShouldReturnNullPointer() {
         when(deviceService.findDeviceById(null)).thenThrow(new NullPointerException(""));
         verifyNoMoreInteractions(deviceService);
     }
 
     @Test
-    public void findDeviceById() throws Exception {
+    public void findDeviceById() {
         Device device = new DeviceBuilder()
                 .withActiveDevice(false)
                 .withName("RandomDevice")
@@ -37,7 +37,7 @@ public class DeviceControllerTest {
     }
 
     @Test
-    public void create() throws Exception {
+    public void create() {
         Device device = new DeviceBuilder()
                 .withActiveDevice(true)
                 .withName("New Alexa")
@@ -47,7 +47,7 @@ public class DeviceControllerTest {
     }
 
     @Test
-    public void createNewNullNameForDevice_ShouldFail() throws Exception {
+    public void createNewNullNameForDevice_ShouldFail() {
         Device device = new DeviceBuilder()
                 .withActiveDevice(true)
                 .withName(null)

@@ -37,7 +37,7 @@ public class RoomControllerTest {
     }
 
     @Test
-    public void findRoomById() throws Exception {
+    public void findRoomById() {
         Room room = new RoomBuilder()
                 .withName("Hallway")
                 .withPopulatedDeviceList(deviceDummySet)
@@ -48,7 +48,7 @@ public class RoomControllerTest {
     }
 
     @Test
-    public void createNewDevice() throws Exception {
+    public void createNewDevice() {
         Room room = new RoomBuilder()
                 .withName("Hallway New")
                 .withPopulatedDeviceList(deviceDummySet)
@@ -58,7 +58,7 @@ public class RoomControllerTest {
     }
 
     @Test
-    public void createNewRoom_WithNullDevices() throws Exception {
+    public void createNewRoom_WithNullDevices() {
         Room room = new RoomBuilder()
                 .withName("No Device Room")
                 .withNullDeviceLice()
